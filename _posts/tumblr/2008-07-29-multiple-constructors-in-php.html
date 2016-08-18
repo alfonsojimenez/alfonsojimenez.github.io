@@ -1,0 +1,18 @@
+---
+layout: post
+title: Multiple Constructors in PHP
+date: '2008-07-29T00:00:00+02:00'
+tags:
+- algorithms
+- php
+tumblr_url: http://alfonsojimenez.tumblr.com/post/30377422731/multiple-constructors-in-php
+---
+<p><img align="right" src="http://67.media.tumblr.com/tumblr_m9gjsgKj6M1r0bq3n.jpg"/></p>
+<p>As you probably know, it’s possible to have multiple constructors in Java. They need to have the same name as the class, and they can only be distinguished by the number and type of arguments. In PHP5, you can only have <strong>one constructor</strong>. You can define it using the reserved word <em>__construct</em>. If the <em>__construct</em> function doesn’t exist, PHP5 will search for the old-style constructor function (by the name of the class). So if we cannot have multiple constructors, how could we create objects with different initial conditions? It’s not a big deal. There’s a pattern called <strong>Factory Method</strong>, which <strong>defines <em>virtual</em> constructors using static methods</strong>. Let’s see an example:</p>
+<pre class="prettyprint">class Person<br/> {<br/>     private $name;<br/>     private $email;<br/><br/>     public static function withName($name)<br/>     {<br/>         $person       = new Person();<br/>         $person-&gt;name = $name;<br/><br/>         return $person;<br/>     }<br/><br/>     public static function withEmail($email)<br/>     {<br/>         $person        = new Person();<br/>         $person-&gt;email = $email;<br/><br/>         return $person;<br/>     }<br/><br/>     public static function fullPerson($name, $email)<br/>     {<br/>         $person        = new Person();<br/>         $person-&gt;name  = $name;<br/>         $person-&gt;email = $email;<br/><br/>         return $person;<br/>     }<br/> }</pre>
+
+<p>We have a class called <strong>Person</strong> which contains 2 private attributes: <strong>name</strong> and <strong>email</strong>. It also has 3 static methods: <strong>withName</strong>, <strong>withEmail</strong> and <strong>fullPerson</strong>. These methods will behave like constructors.</p>
+
+<p>So if we want to create a Person object just with the name value, we can do it using the following statement:</p>
+
+<pre class="prettyprint">$person = Person::withName('Example');</pre>

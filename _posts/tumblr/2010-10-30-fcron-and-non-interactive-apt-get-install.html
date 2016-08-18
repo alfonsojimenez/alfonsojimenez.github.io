@@ -1,0 +1,19 @@
+---
+layout: post
+title: fcron and non interactive apt-get install
+date: '2010-10-30T00:00:00+02:00'
+tags:
+- fcron
+- debian
+- apt-get
+- noninteractive
+tumblr_url: http://alfonsojimenez.tumblr.com/post/13176258018/fcron-and-non-interactive-apt-get-install
+---
+<div class="text">
+<p>This is a very short post, but it might be useful for someone with the same problem. I was trying to install <strong>fcron</strong> on a remote machine via an automated script, but apt-get install couldn’t finish because a dialog using <em>whiptail</em> came up. It wasn’t the common prompt asking yes or no, which can be ignored by the -y option.</p>
+<p>Fortunately, there’s a smart workaround to get rid of these prompts:</p>
+<div class="codecolorer-container php blackboard">
+<div class="php codecolorer"><em>DEBIAN_FRONTEND<span class="sy0">=</span>noninteractive apt<span class="sy0">-</span>get install <span class="sy0">-</span>q <span class="sy0">-</span>y fcron</em></div>
+</div>
+<p>Basically we set the type of user interface used for the installer to <em>noninteractive</em> mode before installing the package. You can always reset <em>DEBIAN_FRONTEND</em> to its default value.</p>
+</div>

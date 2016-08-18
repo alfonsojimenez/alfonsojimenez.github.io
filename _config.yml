@@ -1,0 +1,12 @@
+# Site settings
+title: Alfonso Jiménez
+email: me@alfie.cat
+description: > # this means to ignore newlines until "baseurl:"
+  October 1986, Tacita de plata. I was born naked, wet and hungry. After that, I became a software engineer. I make stuff. My favourite shapes are spades, hearts, diamonds, clubs and hamburgers.
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "http://alfie.cat" # the base hostname & protocol for your site
+twitter_username: alfonsojimenez
+github_username:  alfonsojimenez
+
+# Build settings
+markdown: kramdown
