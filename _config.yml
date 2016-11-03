@@ -16,6 +16,7 @@ author_bio: "Software Engineer at Jobandtalent"
 paginate:	8
 
 url: "https://alfie.cat"
+enforce_ssl: alfie.cat
 baseurl: ""
 #used to display twitter cards
 twitter_handle: '@alfonsojimenez'
