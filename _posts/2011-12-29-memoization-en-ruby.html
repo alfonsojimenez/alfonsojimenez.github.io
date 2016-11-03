@@ -1,0 +1,48 @@
+---
+layout: post
+title: Memoization en Ruby
+date: '2011-12-29T14:59:00+01:00'
+tags:
+- ruby
+- programación
+- memoization
+- memoize
+- algoritmia
+tumblr_url: http://alfonsojimenez.tumblr.com/post/14973222626/memoization-en-ruby
+---
+<p>Un ejemplo práctico muy usado cuando se intenta enseñar recursividad es una función que calcule la secuencia de Fibonacci. Una solución trivial en Ruby podría ser la siguiente:</p>
+{% highlight ruby %}
+def fib(n)
+  n < 2 ? n : fib(n-1) + fib(n-2)
+end
+{% endhighlight %}
+
+<p>Las primeras iteraciones de la secuencia se computan con una profundidad reducida. Por ejemplo fib(6) = 8, fib(7) = 13 o fib(8) = 21. Ejecutando el anterior código en mi máquina, el problema de rendimiento aparece cuando la entrada alcanza valores superiores a 40. Cómo se puede observar, la complejidad del algoritmo es del orden <span class="texhtml">φ<sup><em>n</em></sup></span>. Por ejemplo, para calcular fib(50) es necesario realizar 20.365.011.073 sumas.</p>
+<p>Matemáticamente hablando, una función bien definida siempre devuelve un único valor para una determinada entrada. Es decir, un simple mapeo de elementos. Volviendo a la función anterior, sabemos que fib(8) siempre devolverá 21 independientemente del número de veces que ejecutemos la llamada. Un ejemplo de función matemáticamente mal definida sería rand(n), donde podríamos obtener un resultado diferente en varias llamadas con el mismo valor de entrada.</p>
+<p>Existe una técnica que permite acelerar el rendimiento de funciones bien definidas llamada <strong>memoization</strong>. Básicamente consiste en cachear y reutilizar cálculos ya efectuados, ya que sabemos que la función para un valor de entrada n siempre devolverá el mismo resultado. Refactorizando la función fib(n), obtendríamos lo siguiente:</p>
+
+{% highlight ruby %}
+@series = [0,1]
+
+def fib(n)
+  @series[n] ||= fib(n-1) + fib(n-2)
+end
+{% endhighlight %}
+
+<p>Esta nueva versión almacena los resultados de las llamadas anteriores en un array (@series), reduciendo drásticamente el número de cálculos. De este modo podemos calcular fib(50) = 12586269025 de forma inmediata.</p>
+<p>Además existe un gema muy útil llamada <a href="http://rubygems.org/gems/memoize">memoize</a>, que permite acelerar funciones bien definidas de una manera sencilla. El primer trozo de código quedaría de la siguiente manera:</p>
+
+{% highlight ruby %}
+require 'memoize'
+
+include Memoize
+
+def fib(n)
+  n < 2 ? n : fib(n-1) + fib(n-2)
+end
+
+memoize(:fib)
+{% endhighlight %}
+
+<p>Para futuras llamadas a fib(n), la gema se encargará de cachear los resultados y aumentará el rendimiento de la función.</p>
+<p>Fuente | Wikipedia<br/>Fuente | Ruby best practises</p>

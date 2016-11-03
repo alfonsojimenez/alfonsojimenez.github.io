@@ -1,0 +1,40 @@
+---
+layout: post
+title: phpredis, 2 Fast 2 Furious
+date: '2009-06-02T00:00:00+02:00'
+tags:
+- databases
+- redis
+- phpredis
+tumblr_url: http://alfonsojimenez.tumblr.com/post/30376991590/phpredis-2-fast-2-furious
+---
+<p><strong><img alt="image" src="http://66.media.tumblr.com/tumblr_m9giz7pl0X1r0bq3n.jpg"/></strong><strong>Redis</strong> (REmote DIctionary Server) is a persistent key-value database with built-in net interface written in ANSI-C for Posix systems. Whilst it may at first seem like the wheel is being reinvented here, the need for something beyond a simple key-value database is pretty clear. It’s possible to use <strong>Redis</strong> like a replacement of <strong>memcached</strong>, with the main difference being the dataset is stored persistently – not volatile data – and <strong>Redis</strong> introduces new data structures such as <strong>list</strong> and <strong>sets</strong>. Furthermore, it implements atomic operations in order to interoperate with these data structures.</p>
+<p>I released a <strong>PHP extension</strong> called <a href="http://code.google.com/p/phpredis/" title="phpredis - PHP Extension for Redis">phpredis</a> a couple of weeks ago, which works as a PHP client API for <strong>Redis</strong>. The project is hosted at Google Code at the moment, and you can get the code directly from the SVN repository: <a href="http://phpredis.googlecode.com/svn/trunk/" title="phpredis">http://phpredis.googlecode.com/svn/trunk/</a>.</p>
+<p>Despite a <em>vanilla</em> PHP client library already exists, I felt the need to write it since a PHP extension normally performs better and I wanted to make the most of <strong>Redis</strong> potential.</p>
+<p>Let’s see a snippet of how to make a simple operation to <strong>Redis</strong> using the PHP client:</p>
+<pre class="prettyprint lang-ruby">    $redis = new Redis();
+    $redis-&gt;connect('127.0.0.1', 6379);
+
+    $redis-&gt;set('key', 27);
+
+    echo $redis-&gt;get('key'); // it should print 27
+
+    $redis-&gt;incrby('key', 3);
+
+    echo $redis-&gt;get('key'); // it should print 30
+</pre>
+<p>The code above was quite obvious, it stored a value associate to <em>key</em> and it increments its value by 3. Let’s see another snippet a bit more complex, for example using a <em>list</em>:</p>
+<pre class="prettyprint lang-ruby">    $redis = new Redis();
+    $redis-&gt;connect('127.0.0.1', 6379);
+
+    $redis-&gt;lPush('list', 'val');
+    $redis-&gt;lPush('list', 'val2');
+    $redis-&gt;lPush('list', 'val3', 1);
+
+    echo $redis-&gt;lPop('list', 1); // it should print val3
+    echo $redis-&gt;lPop('list'); // it should print val2
+    echo $this-&gt;lPop('list'); //it should print val
+</pre>
+<p>Notice that depending on the last optional parameter (0 by default) it’s possible to append/extract an element to/from the tail or to/from the head of the list.</p>
+<p>There is a list including all the <a href="http://code.google.com/p/phpredis/wiki/referencemethods">available methods</a>. At the moment, I’m working on the implementation of more new Redis commands and on the support for complex data structures such as arrays and PHP objects.</p>
+<p>Apart from <strong>phpredis</strong>, there are more client API for languages as Perl, Python, Ruby and Erlang. You can find this and more at the <a href="http://code.google.com/p/redis/" title="Redis Database">Redis project homepage</a>. Redis has been written by Salvatore Sanfilippo who I’m chuffed to bits with.</p>

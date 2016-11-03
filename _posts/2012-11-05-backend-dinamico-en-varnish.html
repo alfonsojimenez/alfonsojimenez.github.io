@@ -1,0 +1,26 @@
+---
+layout: post
+title: Backend dinámico en Varnish
+date: '2012-11-05T13:42:06+01:00'
+tags:
+- ruby
+- varnish
+- amazon ec2
+- backend
+- cache
+- autoscaling
+tumblr_url: http://alfonsojimenez.tumblr.com/post/35053060615/backend-dinámico-en-varnish
+---
+<p><img src="http://67.media.tumblr.com/tumblr_md0lt5ZEfV1r0bq3n.jpg"/></p>
+<p>Llevamos unos meses usando Varnish Cache como frontend para nuestras aplicaciones. El rendimiento está siendo fantástico, liberando al backend de mucho workload. Como backend, usamos un cluster de Apache con autoscaling en Amazon EC2. Para enroutar peticiones al cluster usamos ELB (Elastic Load Balancing), que ofrece un endpoint con IP dinámica. Uno de los problemas que encontramos al montar la infraestructura fue al definir la configuración del backend en Varnish.</p>
+<h2>¿Por qué usar ELB?</h2>
+<p>Antes que nada, preguntémonos porqué queremos usar ELB con IP dinámica en lugar de nuestro propio load balancer. Si estuviésemos usando la segunda opción, la capacidad máxima de nuestra aplicación estaría limitada por la capacidad del tráfico de red entrante de nuestro frontend load balancer, sin importar la cantidad de instancias que tengamos detrás. De esta manera, al disponer de un solo punto de entrada nos encontramos con un bottle neck.</p>
+<p>Usando ELB nos aprovechamos de la ventaja de poder usar más de una conexión de red de entrada, ya que según el tráfico existente Amazon usará un load balancer u otro.</p>
+<h2>El problema de Varnish con backend dinámico</h2>
+<p>El problema al configurar un backend dinámico en Varnish reside en que no resuelve un registro CNAME para cada petición. Es decir, en la primera petición Varnish resuelve el host y cachea la dirección IP para las peticiones posteriores. En cuanto la IP cambie el backend dejará de estar disponible.</p>
+<p>La solución que hemos encontrado es agrupar las instancias de backend del cluster autoscaling en un director. Al ser dinámico, tenemos que autogenerarlo cada vez que una instancia se cree o se destruya. Para ello he escrito un pequeño script en ruby que nos genera el director con las instancias pertenecientes a un grupo de autoscaling.</p>
+
+<script src="https://gist.github.com/4016925.js" type="text/javascript"><![CDATA[// <![CDATA[
+
+// ]]]]><![CDATA[>]]></script><p>Podéis conseguir el script completo en <a href="http://github.com/alfonsojimenez/varnish-backend-conf" title="github" target="_blank">github</a>. Por defecto el script genera los nodos con las IPs privadas de las instancias, así que habría que permitir en el firewall acceder a las máquinas de Varnish a esas instancias. Aún así podéis cambiar esas IPs por las públicas, además de la lógica de arbitrariedad y otras bondades que ofrece Varnish como el healthcheck polling.</p>
+<p>Si deseamos eliminar el bottleneck de entrada que comentábamos antes, podemos usar ELB delante de las máquinas que tengamos con Varnish.</p>

@@ -1,0 +1,16 @@
+---
+layout: post
+title: Instalar Android 4.0 ICS en ExoPC
+date: '2012-03-04T22:07:14+01:00'
+tags:
+- android ics
+- exopc slate
+- android-x86
+tumblr_url: http://alfonsojimenez.tumblr.com/post/18747828849/instalar-android-40-ics-en-exopc
+---
+<p><img src="http://65.media.tumblr.com/tumblr_m0dpbmYfhE1r0bq3n.jpg"/></p>
+<p>Ya han sido varias las personas que me han preguntado cómo instalar<strong> Android 4.0 Ice Cream Sandwich</strong> en una <strong>ExoPC Slate</strong>. El procesador que la tablet posee es un  <em>Intel Atom Pineview-M N450</em>, perteneciente a la segunda generación de cores de Intel Atom (45 nm), que soporta un conjunto de instrucciones x86 (también la extensión de 64 bits). Existe un proyecto open source llamado Android x86 que consiste en portar este sistema operativo a <strong>plataformas x86</strong>. Desde la propia web del proyecto podemos conseguir imágenes ya compiladas. Para el caso de la ExoPC, tendremos que descargar <strong>android-x86-4.0-RC1-tegav2.iso</strong>: <a href="http://code.google.com/p/android-x86/downloads/list" title="http://code.google.com/p/android-x86/downloads/list">http://code.google.com/p/android-x86/downloads/list</a></p>
+<p>Una vez que tengamos la imagen, crearemos un dispositivo de arranque usando una memoria flash USB. Para ello, podemos crear el bootloader usando la utilidad <strong>unetbootin</strong>.</p>
+<p>Para la instalación necesitaremos un teclado USB, ya que no se cargarán los drivers de la pantalla multitouch. Para ejecutar el bootloader es necesario tener la memoria USB como prioridad de arranque.</p>
+<p>El proceso de instalación tiene una duración de unos 5 minutos aproximadamente creando una partición nueva en el disco. Además, el instalador te ofrece la posibilidad de instalar GRUB, para poder seleccionar durante el arranque la versión/kernel de Android que desees usar. Por otro lado, también podrás crear una fake SD card para almacenar tus datos.</p>
+<p>Más información | <a href="http://www.android-x86.org" target="_blank">Android x86</a></p>
